@@ -1,7 +1,5 @@
 ## Custom features (on top of upstream [3ds-conspiracy/mw3ds](https://github.com/3ds-conspiracy/mw3ds))
 
-- **Image**: ![Markdown menu](/menu.gif)
-
 
 Added Official expansion packs: Tribunal and Bloodmoon
 
@@ -11,7 +9,7 @@ This fork expands the menus and adds quality-of-life, performance, and cheat opt
 
 ### Pause menu (two columns)
 
-
+ ![Markdown menu](/menu.gif)
 
 | Left | Right |
 |------|--------|
