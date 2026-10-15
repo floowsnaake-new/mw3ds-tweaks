@@ -1,8 +1,10 @@
 ## Custom features (on top of upstream [3ds-conspiracy/mw3ds](https://github.com/3ds-conspiracy/mw3ds))
 
 Working on a Mod Manager
-(/mod.png)
 
+ ![Markdown menu](/mod.gif)
+
+ 
 Upstream provides a basic **Options** screen (3D, difficulty, volumes, gyro, combat rules, hit numbers) and a **Controls** help screen. The pause menu is a single column.
 
 This fork expands the menus and adds quality-of-life, performance, and cheat options.
