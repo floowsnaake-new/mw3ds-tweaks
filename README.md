@@ -2,7 +2,7 @@
 
 Working on a Mod Manager
 
-![Working on a Mod Manager](/mod.gif "Working on a Mod Manager")
+![Working on a Mod Manager](/mod.png "Working on a Mod Manager")
  
 Upstream provides a basic **Options** screen (3D, difficulty, volumes, gyro, combat rules, hit numbers) and a **Controls** help screen. The pause menu is a single column.
 
