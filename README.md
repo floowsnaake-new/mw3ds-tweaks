@@ -47,6 +47,7 @@ Added Easer to read text and also a blue map pointer so you can see were you are
 - Subtitles on/off
 - Hide crosshair / top-screen HUD / minimap
 - Screenshot hides HUD
+- Font and text size also mini-map marker color
 - Autosave every 5 / 10 / 15 / 30 minutes (or off)
 
 ### Cheats *(not saved between sessions)*
