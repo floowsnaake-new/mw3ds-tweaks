@@ -9,6 +9,7 @@ Upstream provides a basic **Options** screen (3D, difficulty, volumes, gyro, com
 This fork expands the menus and adds quality-of-life, performance, and cheat options.
 
 Added Official expansion packs: Tribunal and Bloodmoon
+Added Easer to read text and also a blue map pointer so you can see were you are on the map easier
 
 ### Pause menu (two columns)
 
