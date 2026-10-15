@@ -1,6 +1,6 @@
 ## Custom features (on top of upstream [3ds-conspiracy/mw3ds](https://github.com/3ds-conspiracy/mw3ds))
 
-- **Image**: ![Markdown menu](/menu.png)
+- **Image**: ![Markdown menu](/menu.gif)
 
 
 Added Official expansion packs: Tribunal and Bloodmoon
