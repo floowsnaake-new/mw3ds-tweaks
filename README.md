@@ -1,5 +1,9 @@
 ## Custom features (on top of upstream [3ds-conspiracy/mw3ds](https://github.com/3ds-conspiracy/mw3ds))
 
+
+added a web UI bridge so you can play using a controller or keyboard also input commands to the game in a terminal and there's a small window of the camera 
+
+
 Working on a Mod Manager
 
 ![Working on a Mod Manager](/mod.png "Working on a Mod Manager")
