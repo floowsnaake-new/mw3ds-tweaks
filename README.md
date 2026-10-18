@@ -3,6 +3,7 @@
 
 added a web UI bridge so you can play using a controller or keyboard also input commands to the game in a terminal and there's a small window of the camera 
 
+https://www.youtube.com/watch?v=UbzMUPlKpxo
 
 Working on a Mod Manager
 
