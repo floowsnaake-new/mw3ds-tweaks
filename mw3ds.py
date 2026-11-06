@@ -6,7 +6,7 @@ On first run it asks for the Morrowind install root and saves it in
 mw3ds.cfg next to this script. Every run then:
 
   1. checks every dependency the pipeline needs
-  2. offers to fix anything fixable (venv, pip, makerom copy, converter patch)
+  2. offers to fix anything fixable (venv, pip, converter patch)
   3. shows a task menu:
         1) Convert game data only
         2) Build the CIA only (needs out/data)
@@ -18,6 +18,11 @@ mw3ds.cfg next to this script. Every run then:
 
 Everything (convert, compile, package) runs inside this Python file - no
 external build scripts needed.
+
+makerom lookup is strict per OS:
+    Linux   -> Linux_makerom
+    macOS   -> mac_makerom
+    Windows -> Windows_makerom.exe
 
 Usage:
     python3 mw3ds.py
@@ -46,6 +51,13 @@ HERE     = os.path.dirname(os.path.abspath(__file__))
 CFG      = os.path.join(HERE, "mw3ds.cfg")
 BAK      = ".pre-expansions.bak"
 MAX_JOBS = 4
+
+# The only makerom filename each OS is allowed to use.
+MAKEROM_NAMES = {
+    "linux":   "Linux_makerom",
+    "mac":     "mac_makerom",
+    "windows": "Windows_makerom.exe",
+}
 
 
 # ==========================================================================
@@ -90,7 +102,6 @@ def _run(cmd, cwd, env=None, label=None):
 
 
 def _devkit_env():
-    """Return an env dict with DEVKITPRO/DEVKITARM/PATH set up for the build."""
     devkit = _default_devkitpro()
     if not os.path.isfile(os.path.join(devkit, "devkitARM", "3ds_rules")):
         sys.exit("  devkitPro not found at %s - install from "
@@ -109,7 +120,6 @@ def _devkit_env():
 
 
 def _copy_tree(src, dst):
-    """Copy src -> dst with a progress line every 500 files."""
     total = sum(len(f) for _, _, f in os.walk(src))
     n = 0
     os.makedirs(dst, exist_ok=True)
@@ -203,6 +213,25 @@ def ask_morrowind(cfg, from_arg):
 
 
 # ==========================================================================
+# makerom lookup (strict per OS)
+# ==========================================================================
+def _makerom_name():
+    if IS_WINDOWS:
+        return MAKEROM_NAMES["windows"]
+    if IS_MAC:
+        return MAKEROM_NAMES["mac"]
+    return MAKEROM_NAMES["linux"]
+
+
+def find_makerom(root):
+    """Return the path of the makerom for THIS OS, or None.
+    Strict: on Linux only Linux_makerom counts, on macOS only mac_makerom,
+    on Windows only Windows_makerom.exe. No cross-platform fallbacks."""
+    p = os.path.join(root, _makerom_name())
+    return p if os.path.isfile(p) else None
+
+
+# ==========================================================================
 # dependency checks
 # ==========================================================================
 _IMPORT_NAMES = {"pillow": "PIL", "audioop-lts": "audioop"}
@@ -240,21 +269,6 @@ def python_ok(root):
         return venv, []
     missing = [m for m in needs if not _has_modules(sys.executable, [m])]
     return None, missing
-
-
-def find_makerom(root):
-    name = {"linux": "makerom", "mac": "mac_makerom",
-            "windows": "makerom.exe"}["windows" if IS_WINDOWS
-                                       else "mac" if IS_MAC else "linux"]
-    p = os.path.join(root, name)
-    if os.path.isfile(p):
-        return p
-    for alt in ("makerom.exe", "makerom", "mac_makerom",
-                "Linux_makerom", "Windows_makerom.exe"):
-        q = os.path.join(root, alt)
-        if os.path.isfile(q) and (alt.endswith(".exe") == IS_WINDOWS):
-            return q
-    return None
 
 
 def check_all(root, mw):
@@ -307,14 +321,14 @@ def check_all(root, mw):
         problems.append("make not on PATH")
 
     print("--- makerom ---")
+    expected = _makerom_name()
     mk = find_makerom(root)
     if mk:
         print("  OK      " + os.path.basename(mk))
         _chmod_x(mk)
     else:
-        print("  MISSING makerom binary for this platform")
-        problems.append("makerom missing - download from "
-                        "https://github.com/3DSGuy/Project_CTR/releases")
+        print("  MISSING " + expected)
+        problems.append("missing " + expected + " in " + root)
 
     print("--- build assets ---")
     rsf = glob.glob(os.path.join(root, "tools", "build", "*.rsf"))
@@ -602,51 +616,25 @@ def setup_venv(root):
     return venv
 
 
-def copy_makerom(root):
-    target = {"linux": "makerom", "mac": "mac_makerom",
-              "windows": "makerom.exe"}["windows" if IS_WINDOWS
-                                         else "mac" if IS_MAC else "linux"]
-    dst = os.path.join(root, target)
-    if os.path.isfile(dst):
-        _chmod_x(dst)
-        return dst
-    candidates = (("makerom.exe", "Windows_makerom.exe") if IS_WINDOWS
-                  else ("mac_makerom", "makerom_mac") if IS_MAC
-                  else ("makerom", "Linux_makerom"))
-    for name in candidates:
-        src = os.path.join(root, name)
-        if os.path.isfile(src):
-            try:
-                shutil.copy2(src, dst)
-                _chmod_x(dst)
-                print("  copied %s -> %s" % (name, target))
-                return dst
-            except OSError as e:
-                print("  could not copy %s: %s" % (name, e))
-    return None
-
-
 def offer_fixes(root, problems, fixable):
+    """Return True if any fix was applied, False otherwise."""
     if not fixable:
-        return
+        return False
     print()
     print("The following things can be fixed automatically:")
     if "python" in fixable:    print("  - set up .venv and pip install requirements")
     if "converter" in fixable: print("  - patch the converter for the expansions")
-    print("  - ensure makerom has the correct name and +x")
     try:
         ans = input("Fix now? [Y/n] ").strip().lower()
     except (EOFError, KeyboardInterrupt):
-        return
+        return False
     if ans not in ("", "y", "yes"):
-        return
+        return False
     if "python" in fixable:
         setup_venv(root)
-    mk = copy_makerom(root)
-    if mk:
-        print("  makerom: " + os.path.basename(mk))
     if "converter" in fixable and count_markers(root) == 0:
         patch_converter(root)
+    return True
 
 
 # ==========================================================================
@@ -690,8 +678,7 @@ def do_build_cia(root):
 
     makerom = find_makerom(root)
     if not makerom:
-        sys.exit("  makerom missing for this platform - download from "
-                 "https://github.com/3DSGuy/Project_CTR/releases")
+        sys.exit("  makerom missing for this platform - expected " + _makerom_name())
     _chmod_x(makerom)
 
     rsf = glob.glob(os.path.join(root, "tools", "build", "*.rsf"))
@@ -831,8 +818,13 @@ def main():
     if args.check_only:
         return 0 if not problems else 1
 
-    offer_fixes(root, problems, fixable)
-    problems, fixable = check_all(root, mw)
+    # Only recheck if there was something fixable AND the user agreed to fix it.
+    if fixable:
+        applied = offer_fixes(root, problems, fixable)
+        if applied:
+            print()
+            print("=== re-checking after fixes ===")
+            problems, fixable = check_all(root, mw)
 
     if problems:
         print()
@@ -857,13 +849,15 @@ def main():
                     mw = change
                     cfg["mw3ds"]["morrowind_dir"] = mw
                     save_cfg(cfg)
+                    print()
+                    print("=== re-checking with new Morrowind path ===")
+                    problems, fixable = check_all(root, mw)
+                    if problems:
+                        print()
+                        print("Cannot continue until the problems above are fixed.")
+                        return 1
                 else:
                     print("  not a valid Morrowind root (no 'Data Files'), keeping the old one")
-            problems, fixable = check_all(root, mw)
-            if problems:
-                print()
-                print("Cannot continue until the problems above are fixed.")
-                return 1
 
     if task == "restore":
         restore_converter(root); return 0
