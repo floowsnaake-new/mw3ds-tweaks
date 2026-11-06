@@ -1,3 +1,0 @@
-GLOBAL: scripts/mw3ds_sbs/global.lua
-PLAYER: scripts/mw3ds_sbs/player.lua
-NPC, CREATURE: scripts/mw3ds_sbs/actor.lua
