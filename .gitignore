@@ -1,0 +1,38 @@
+# Secrets & local config
+.env
+*.local
+
+# Build & converted data (NEVER commit game content)
+out/
+romfs/
+build/
+*.cia
+*.3dsx
+*.elf
+*.smdh
+*.map
+
+# Downloaded tools
+makerom
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+convert.log
+*.log
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Temporary
+*.bak
+*.pre-expansions.bak
+path.txt
