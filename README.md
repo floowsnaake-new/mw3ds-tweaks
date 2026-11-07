@@ -9,6 +9,9 @@
 
 ---
 
+![Menu](/menu.gif)
+
+
 ## 🎮 Features
 
 | Feature | Description |
