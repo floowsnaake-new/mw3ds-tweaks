@@ -1,73 +1,111 @@
-## Custom features (on top of upstream [3ds-conspiracy/mw3ds](https://github.com/3ds-conspiracy/mw3ds))
+MW3DS Tweaks
 
+An enhanced fork of MW3DS – Morrowind for Nintendo 3DS, featuring new tools, improved menus, controller support and quality-of-life improvements.
 
-added a web UI bridge so you can play using a controller or keyboard also input commands to the game in a terminal and there's a small window of the camera also export save to pc, working on being able to play the save on pc morrowind.
+🎮 Features
 
+Multiplayer – Multiplayer functionality.
 
-![Working on a Mod Manager](/pclink.gif "Working on a Mod Manager")
+Cheats – God mode, unlimited resources, extra gold and teleportation.
 
-https://www.youtube.com/watch?v=UbzMUPlKpxo
+Custom UI Styles – Different interface styles and improved menus.
 
-Working on a Mod Manager
+Virtual Joysticks – On-screen joystick controls.
 
-![Working on a Mod Manager](/mod.png "Working on a Mod Manager")
- 
-Upstream provides a basic **Options** screen (3D, difficulty, volumes, gyro, combat rules, hit numbers) and a **Controls** help screen. The pause menu is a single column.
+Controller Support – Play with a connected game controller.
 
-This fork expands the menus and adds quality-of-life, performance, and cheat options.
+Key Remapping – Customize keyboard and controller buttons.
 
-Added Official expansion packs: Tribunal and Bloodmoon
-Added Easer to read text and also a blue map pointer so you can see were you are on the map easier
+Improved Menus – Expanded pause menu with graphics, performance and interface settings.
 
-### Pause menu (two columns)
+Performance Options – Adjust draw distance, FPS and visual effects.
 
- ![Markdown menu](/menu.gif)
+Tribunal & Bloodmoon – Support for the official expansions.
 
-| Left | Right |
-|------|--------|
-| Return to game | Graphics |
-| Save / Load | Performance |
-| Rest / Wait | Controls |
-| Options | Interface |
-| Save and quit | Cheats |
+Terminal Commands – Send commands to the game through a terminal.
 
-### Graphics
-- Draw distance (25–100%)
-- Fog on/off
-- Weather on/off (forces clear sky)
-- Brightness (70–130%)
+Camera Preview – Small camera preview window on your PC.
 
-### Performance
-- Presets: Low / Balanced / High
-- Frame cap: Auto / 30 / 60
-- Character distance & clutter distance
-- Toggles: sky & clouds, terrain layers, transparency, characters, distant land, enchant shimmer
-- FPS counter on/off
+💻 Installation
 
-### Controls
-- Look sensitivity (25–200%)
-- Invert Y look
-- Swap sticks (C-stick walks, Circle Pad looks)
-- Always run g on/off
-- Button layout: Classic / GoldenEye / Xbox
-- 
-### Interface
-- Subtitles on/off
-- Hide crosshair / top-screen HUD / minimap
-- Screenshot hides HUD
-- Font and text size also mini-map marker color
-- Autosave every 5 / 10 / 15 / 30 minutes (or off)
+🐧 Linux
 
-### Cheats *(not saved between sessions)*
-- Restore health, magicka, fatigue
-- +1000 gold
-- God mode
-- Infinite magicka & fatigue
-- Weightless
-- Walk speed & jump power multipliers
-- All skills +10, all attributes +10
-- Teleport to any town listed in the game data
+Open a terminal:
 
-### Other
-- **L + R + Select** → screenshot saved to `sdmc:/3ds/mw3ds/screenshots/`
-- Graphics / Performance / Controls / Interface settings are written to `settings.txt` and restored on next launch
+git clone --recurse-submodules https://github.com/floowsnaake-new/mw3ds-tweaks.git
+cd mw3ds-tweaks
+
+sudo apt install python3 python3-pip python3-venv git
+
+python3 -m venv .venv
+source .venv/bin/activate
+
+pip install -r requirements.txt
+
+python3 mw3ds.py
+
+🪟 Windows
+
+Install Python 3.
+
+During installation, enable Add Python to PATH.
+
+Install Git for Windows.
+
+Open Command Prompt or PowerShell.
+
+Run:
+
+git clone --recurse-submodules https://github.com/floowsnaake-new/mw3ds-tweaks.git
+
+cd mw3ds-tweaks
+
+python -m venv .venv
+
+.venv\Scripts\activate
+
+pip install -r requirements.txt
+
+python mw3ds.py
+
+🍎 macOS
+
+Install Python 3.
+
+Install Git.
+
+Open Terminal.
+
+Run:
+
+git clone --recurse-submodules https://github.com/floowsnaake-new/mw3ds-tweaks.git
+
+cd mw3ds-tweaks
+
+python3 -m venv .venv
+
+source .venv/bin/activate
+
+pip install -r requirements.txt
+
+python3 mw3ds.py
+
+🎥 Video Showcase
+
+See MW3DS Tweaks in action!
+
+▶ Watch on YouTube
+
+📦 Original Project
+
+Based on the original MW3DS project:
+
+https://github.com/3ds-conspiracy/mw3ds
+
+All credit goes to the original developers for creating MW3DS.
+
+⚠️ Disclaimer
+
+This is an unofficial fan-made modification and is not affiliated with Bethesda.
+
+You must own a legal copy of The Elder Scrolls III: Morrowind. No copyrighted game files are included.
