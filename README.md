@@ -12,6 +12,9 @@
 ![Menu](/menu.gif)
 
 
+Install script:
+![Menu](/install.png)
+
 ## 🎮 Features
 
 | Feature | Description |
